@@ -31,7 +31,9 @@ const computerChoice = () => {
 // Function to get the human's choice
 const humanChoice = () => {
   // Prompt the user for their choice
-  const choice = prompt("Choose rock, paper, or scissors:");
+  const choice = prompt(
+    "Choose rock, paper, or scissors:",
+  );
   return choice.trimEnd().toLowerCase();
 };
 
@@ -53,21 +55,31 @@ const determineWinner = (human, computer) => {
 };
 
 // Main game function
+const playGame = () => {
+  let rounds = 0;
+  while (rounds < 5) {
+    rounds++;
+    console.log(
+      `Round ${rounds} result: ${result}\nYour Score:${humanScore} While ComputerScore: ${computerScore}`,
+    );
+    const playAgain = prompt(
+      `Round ${rounds} result: ${result}\n===================\nYour Score:${humanScore} While ComputerScore: ${computerScore}\n===================\nMaximum of 5 Rounds.\n===================\nDo you want to play again?: (yes/no)`,
+    );
+    if (playAgain === "yes") {
+      playRound();
+    } else {
+      console.log("Thanks for playing!");
+      break;
+    }
+  }
+};
+
 const playRound = () => {
   const human = humanChoice();
   const computer = computerChoice();
   const result = determineWinner(human, computer);
-  console.log(
-    `${result}\nYour Score:${humanScore} While ComputerScore: ${computerScore}`,
-  );
-  const playAgain = prompt(
-    `${result}\nYour Score:${humanScore} While ComputerScore: ${computerScore}\nYou chose: ${human}\nComputer chose: ${computer}\n${result}\n Do you want to play again? (yes/no)`,
-  );
-  if (playAgain === "yes") {
-    playRound();
-  } else {
-    console.log("Thanks for playing!");
-  }
+  return result;
 };
 
-playRound();
+let result = playRound();
+playGame();
