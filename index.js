@@ -53,7 +53,7 @@ const determineWinner = (human, computer) => {
 };
 
 // Main game function
-const playGame = () => {
+const playRound = () => {
   const human = humanChoice();
   const computer = computerChoice();
   const result = determineWinner(human, computer);
@@ -64,10 +64,10 @@ const playGame = () => {
     `${result}\nYour Score:${humanScore} While ComputerScore: ${computerScore}\nYou chose: ${human}\nComputer chose: ${computer}\n${result}\n Do you want to play again? (yes/no)`,
   );
   if (playAgain === "yes") {
-    playGame();
+    playRound();
   } else {
     console.log("Thanks for playing!");
   }
 };
 
-playGame();
+playRound();
