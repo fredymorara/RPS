@@ -13,10 +13,10 @@ console.log("Hello, Welcome to our Rock Paper Scissors game!");
 // Variables to track and keep scores
 let humanScore = 0;
 let computerScore = 0;
+let winner = null;
 
 // Function to get the computer's choice
 const computerChoice = () => {
-  // Generate a random number between 0 and 2
   const randomNum = Math.floor(Math.random() * 3);
   switch (randomNum) {
     case 0:
@@ -30,11 +30,9 @@ const computerChoice = () => {
 
 // Function to get the human's choice
 const humanChoice = () => {
-  // Prompt the user for their choice
-  const choice = prompt(
-    "Choose rock, paper, or scissors:",
-  );
-  return choice.trimEnd().toLowerCase();
+  const choice = prompt("Choose rock, paper, or scissors:");
+  if (choice === null) return "";
+  return choice.trim().toLowerCase();
 };
 
 // Function to determine the winner
@@ -54,32 +52,62 @@ const determineWinner = (human, computer) => {
   return "You lose!";
 };
 
-// Main game function
-const playGame = () => {
-  let rounds = 0;
-  while (rounds < 5) {
-    rounds++;
-    console.log(
-      `Round ${rounds} result: ${result}\nYour Score:${humanScore} While ComputerScore: ${computerScore}`,
-    );
-    const playAgain = prompt(
-      `Round ${rounds} result: ${result}\n===================\nYour Score:${humanScore} While ComputerScore: ${computerScore}\n===================\nMaximum of 5 Rounds.\n===================\nDo you want to play again?: (yes/no)`,
-    );
-    if (playAgain === "yes") {
-      playRound();
-    } else {
-      console.log("Thanks for playing!");
-      break;
-    }
-  }
-};
-
+// Function to play a single round
 const playRound = () => {
   const human = humanChoice();
   const computer = computerChoice();
   const result = determineWinner(human, computer);
-  return result;
+  return { human, computer, result };
 };
 
-let result = playRound();
+// Main game function
+const playGame = () => {
+  let rounds = 0;
+
+  while (rounds < 5) {
+    rounds++;
+    const currentRound = playRound();
+
+    // Check if user clicked cancel or entered empty
+    if (!currentRound.human) {
+      console.log("Game cancelled.");
+      break;
+    }
+
+    const playAgain = prompt(
+      `Round ${rounds} result: ${currentRound.result}\n===================\nYou chose: ${currentRound.human}\nComputer chose: ${currentRound.computer}\n===================\nYour Score: ${humanScore} | Computer Score: ${computerScore}\n===================\nDo you want to continue to the next round? (yes/no)`,
+    );
+
+    if (playAgain === null || playAgain.trim().toLowerCase() !== "yes") {
+      if (humanScore > computerScore) {
+        winner = "You";
+      } else if (computerScore > humanScore) {
+        winner = "computer";
+      } else {
+        winner = "Nobody (It's a tie)";
+      }
+      console.log("Thanks for playing!");
+      alert(
+        `Thanks for playing!\n==============\nYou played ${rounds} round(s) and won ${humanScore}\nFinal winner is: ${winner}`,
+      );
+      break;
+    }
+  }
+
+  // If they finish all 5 rounds without clicking 'no'
+  if (rounds === 5) {
+    if (humanScore > computerScore) {
+      winner = "You";
+    } else if (computerScore > humanScore) {
+      winner = "computer";
+    } else {
+      winner = "Nobody (It's a tie)";
+    }
+    alert(
+      `Game Over!\n==============\nFinal Score:\nYou: ${humanScore} | Computer: ${computerScore}\nFinal winner is: ${winner}`,
+    );
+  }
+};
+
+// Start the game loop
 playGame();
